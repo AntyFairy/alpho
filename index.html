@@ -2,83 +2,126 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Alphoresis 2- Connexion</title>
+  <title>Accueil - Alphoresis 2</title>
   <style>
     body {
-      font-family: sans-serif;
-      margin: 2em;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      text-align: center;
     }
-    input, button {
-      margin: 0.5em 0;
-      padding: 0.5em;
+
+    header img {
       width: 100%;
-      max-width: 300px;
+      height: auto;
     }
-    .form-section {
-      border: 1px solid #ccc;
+
+    .login-container {
+      margin: 2em auto;
       padding: 1em;
-      margin-bottom: 2em;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 400px;
     }
-    #result {
-      white-space: pre-wrap;
-      background: #f4f4f4;
+
+    input[type="email"],
+    input[type="password"] {
+      display: block;
+      width: 90%;
+      margin: 1em auto;
+      padding: 0.8em;
+      font-size: 1em;
+    }
+
+    button, .inscription-btn {
+      display: inline-block;
+      margin: 1em;
+      padding: 0.8em 1.5em;
+      font-size: 1em;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+
+    .description {
+      margin: 3em auto;
       padding: 1em;
+      max-width: 800px;
+      text-align: left;
+    }
+
+    .description img {
+      max-width: 100%;
       margin-top: 1em;
     }
   </style>
 </head>
 <body>
 
-  <h1>Alphoresis 2 – Connexion / Inscription</h1>
+  <!-- Bandeau image -->
+  <header>
+    <img src="images/bandeau.png" alt="Bandeau du site">
+  </header>
 
-  <div class="form-section">
-    <h2>Inscription</h2>
-    <input id="reg-username" placeholder="Nom d'utilisateur">
-    <input id="reg-email" placeholder="Adresse email">
-    <input id="reg-password" placeholder="Mot de passe" type="password">
-    <button onclick="register()">Créer un compte</button>
-  </div>
-
-  <div class="form-section">
+  <!-- Connexion -->
+  <section class="login-container">
     <h2>Connexion</h2>
-    <input id="login-email" placeholder="Adresse email">
-    <input id="login-password" placeholder="Mot de passe" type="password">
-    <button onclick="login()">Se connecter</button>
-  </div>
+    <form id="login-form">
+      <input type="email" name="email" placeholder="Adresse e-mail" required>
+      <input type="password" name="password" placeholder="Mot de passe" required>
+      <button type="submit">Se connecter</button>
+    </form>
+    <p id="login-message"></p>
+    <a class="inscription-btn" href="register.html">Créer un compte</a>
+  </section>
 
-  <div id="result"></div>
+  <!-- Présentation du site -->
+  <section class="description">
+    <h2>À propos du jeu</h2>
+    <p>Bienvenue sur <strong>Alphoresis 2</strong>, un jeu de cartes à collectionner en ligne où les joueurs s'affrontent dans des duels stratégiques !</p>
+    <p>Gagne des cartes en combattant d'autres joueurs, grimpe au classement, et récupère ta récompense quotidienne.</p>
+    <p>Développe ta collection et découvre de nouvelles stratégies à chaque partie.</p>
+    <img src="images/exemple-carte.png" alt="Exemple de carte du jeu">
+  </section>
 
   <script>
-    const API_URL = "https://alphoresis-2.onrender.com/api/auth";
+    // (Exemple de connexion - adapte selon ton backend)
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const email = form.email.value;
+      const password = form.password.value;
+      const msg = document.getElementById("login-message");
 
-    async function register() {
-      const username = document.getElementById("reg-username").value;
-      const email = document.getElementById("reg-email").value;
-      const password = document.getElementById("reg-password").value;
+      try {
+        const res = await fetch("https://alphoresis-2.onrender.com/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
 
-      const res = await fetch(`${API_URL}/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password })
-      });
+        const data = await res.json();
 
-      const data = await res.json();
-      document.getElementById("result").textContent = "Inscription : " + JSON.stringify(data, null, 2);
-    }
+        if (res.ok) {
+          msg.textContent = `✅ Connexion réussie, Bienvenue ${data.username} !`;
+          msg.style.color = "green";
 
-    async function login() {
-      const email = document.getElementById("login-email").value;
-      const password = document.getElementById("login-password").value;
-
-      const res = await fetch(`${API_URL}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
-      });
-
-      const data = await res.json();
-      document.getElementById("result").textContent = "Connexion : " + JSON.stringify(data, null, 2);
-    }
+          setTimeout(() => {
+            window.location.href = `accueil.html?username=${encodeURIComponent(data.username)}`;
+          }, 1500);
+        } else {
+          msg.textContent = data.message || "Erreur de connexion";
+          msg.style.color = "red";
+        }
+      } catch (err) {
+        msg.textContent = "Erreur serveur.";
+        msg.style.color = "red";
+      }
+    });
   </script>
 
 </body>

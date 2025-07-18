@@ -1,12 +1,88 @@
 <!DOCTYPE html>
-<html lang="">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
-    <header></header>
-    <main></main>
-    <footer></footer>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Alphoresis 2 - Home</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #0d1017;
+      color: #ffffff;
+    }
+
+    header {
+      background-color: #1e1e1e;
+      padding: 1em;
+      text-align: center;
+      border-bottom: 1px solid #333;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.8em;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 2em;
+      padding: 1em;
+      background-color: #181818;
+      border-bottom: 1px solid #333;
+    }
+
+    nav a {
+      color: #90caf9;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .content {
+      padding: 2em;
+    }
+
+    .announcement {
+      background-color: #1f1f1f;
+      padding: 1em;
+      margin-bottom: 1em;
+      border-left: 4px solid #90caf9;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Welcome, <span id="username">Player</span>!</h1>
+  </header>
+
+  <nav>
+    <a href="#">Card Collection</a>
+    <a href="#">Start Battle</a>
+    <a href="#">Leaderboards</a>
+    <a href="#">Daily Rewards</a>
+    <a href="index.html">Logout</a>
+  </nav>
+
+  <div class="content">
+    <h2>Latest News</h2>
+
+    <div class="announcement">
+      <h3>Beta announcements</h3>
+      <p>As Alphoresis 2 is still in development, annoucements won't cover all minor updates.</p>
+    </div>
+
+    
+  </div>
+
+  <script>
+    const username = localStorage.getItem("username") || "Player";
+    document.getElementById("username").textContent = username;
+  </script>
+</body>
 </html>
+
